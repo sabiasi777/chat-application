@@ -1,0 +1,72 @@
+.Profile {
+    width: 90vh;
+    height: 60vh;
+    padding: 30px;
+    background-color: rgb(17, 25, 40);
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+
+    .profile {
+        display: flex;
+        justify-content: space-between; 
+        height: 100%;
+        gap: 30px;
+
+        .right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            img {
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                object-fit: cover;
+                cursor: pointer;
+            }
+
+            span {
+                font-size: 18px;
+                font-weight: 500;
+            }
+        }
+
+        .left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            input {
+                border: none;
+                outline: none;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: rgb(255, 255, 255);
+                text-overflow: ellipsis;
+            }
+        }
+        .bottom {
+            display: flex;
+            align-self: flex-end;
+            button {
+                border: none;
+                outline: none;
+                padding: 5px;
+                border-radius: 5px;
+                background-color: rgb(36, 193, 245);
+                cursor: pointer;
+
+                &:disabled {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}

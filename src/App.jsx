@@ -8,6 +8,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/userStore";
 import { useChatStore } from "./lib/chatStore";
+import Chatt from "./components/chat/chatt/Chatt";
+import Detaill from "./components/detail/detaill/Detaill";
 
 const App = () => {
 
@@ -32,8 +34,8 @@ const App = () => {
         currentUser ? (
           <>
           <List />
-          {chatId && <Chat />}
-          {chatId && <Detail />}
+          {chatId ? <Chat /> : <Chatt />}
+          {chatId ? <Detail /> : <Detaill />}
           </>
         ) : (<Login />)
       }

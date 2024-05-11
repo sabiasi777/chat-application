@@ -6,6 +6,7 @@ import { db } from '../../lib/firebase'
 import { useChatStore } from '../../lib/chatStore'
 import { useUserStore } from '../../lib/userStore'
 import { upload } from '../../lib/upload'
+import moment from 'moment'
 
 const Chat = () => {
     const [open, setOpen] = useState(false)
@@ -15,6 +16,7 @@ const Chat = () => {
         file: null,
         url: ''
     })
+    const [send, setSend] = useState(false)
 
     const { currentUser } = useUserStore()
     const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = useChatStore()
@@ -23,7 +25,7 @@ const Chat = () => {
 
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [])
+    }, [chatId, send])
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'chats', chatId), (res) => {
@@ -50,7 +52,7 @@ const Chat = () => {
     }
 
     const handleSend = async () => {
-        if(text === '') return;
+        if(text === '' && img.file===null) return;
 
         let imgUrl = null;
 
@@ -63,7 +65,7 @@ const Chat = () => {
                 messages: arrayUnion({
                     senderId: currentUser.id,
                     text,
-                    createdAt: new Date(),
+                    createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
                     ...(imgUrl && {img: imgUrl})
                 })
             })
@@ -95,7 +97,7 @@ const Chat = () => {
             file: null,
             url: ''
         })
-
+        setSend(prev=>!prev);
         setText('')
         }
     }
@@ -121,8 +123,8 @@ const Chat = () => {
                     <div className={message.senderId === currentUser?.id ? 'message own' : 'message'} key={message?.createdAt}>
                     <div className="texts">
                         {message.img && <img src={message.img} alt="" />}
-                        <p>{message.text}</p>
-                        {/* <span>{message}</span> */}
+                        {message.text && <p>{message.text}</p>}
+                        <span>{moment(message.createdAt).fromNow()}</span>
                     </div>
                 </div>
                 ))
@@ -136,10 +138,10 @@ const Chat = () => {
             </div>
             <div className="bottom">
                 <div className="icons">
-                    <label htmlFor="file">
+                    <label htmlFor="file" >
                         <img src="./img.png" alt="" />
                     </label>
-                    <input type="file" id='file' style={{display: 'none'}} onChange={handleImg} />
+                    <input type="file" id='file' style={{display: 'none'}} onChange={handleImg} disabled={isCurrentUserBlocked || isReceiverBlocked} />
                     <img src="./camera.png" alt="" />
                     <img src="./mic.png" alt="" />
                 </div>
@@ -151,8 +153,17 @@ const Chat = () => {
                 disabled={isCurrentUserBlocked || isReceiverBlocked} />
                 <div className="emoji">
                     <img src="./emoji.png" alt="" onClick={()=>setOpen(prev=>!prev)} />
-                    <div className="picker">
-                        <EmojiPicker open={open} onEmojiClick={handleEmoji}/>
+                    <div className="picker" >
+                        <EmojiPicker 
+                        open={open && !(isCurrentUserBlocked || isReceiverBlocked)}
+                        onEmojiClick={handleEmoji}
+                        skinTonesDisabled={isCurrentUserBlocked || isReceiverBlocked}
+                        lazyLoadEmojis={isCurrentUserBlocked || isReceiverBlocked}
+                        searchDisabled={isCurrentUserBlocked || isReceiverBlocked}
+                        reactionsDefaultOpen={isCurrentUserBlocked || isReceiverBlocked}
+                        allowExpandReactions={isCurrentUserBlocked || isReceiverBlocked}
+                        emojiStyle='facebook'
+                        />
                     </div>
                 </div>
                 <button className='sendButton' onClick={handleSend} disabled={isCurrentUserBlocked || isReceiverBlocked}>Send</button>

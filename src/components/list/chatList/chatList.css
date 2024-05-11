@@ -70,6 +70,10 @@
             }
 
             p {
+                width: 200px; 
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 font-size: 14px;
                 font-weight: 300;
             }
