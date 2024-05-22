@@ -81,7 +81,7 @@ const Chat = () => {
 
                     const chatIndex = userChatsData.chats.findIndex(c=>c.chatId === chatId)
 
-                    userChatsData.chats[chatIndex].lastMessage = text
+                    userChatsData.chats[chatIndex].lastMessage = text ? text : 'photo'
                     userChatsData.chats[chatIndex].isSeen = id === currentUser.id ? true : false;
                     userChatsData.chats[chatIndex].updatedAt = Date.now()
 
