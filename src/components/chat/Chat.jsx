@@ -7,6 +7,7 @@ import { useChatStore } from '../../lib/chatStore'
 import { useUserStore } from '../../lib/userStore'
 import { upload } from '../../lib/upload'
 import moment from 'moment'
+//adding to github
 
 const Chat = () => {
     const [open, setOpen] = useState(false)
